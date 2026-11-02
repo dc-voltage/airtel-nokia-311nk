@@ -1,14 +1,33 @@
 # Nokia FastMile 5G Outdoor CPE (AOD311NK) Toolkit — `apnctl`
 
-[![Author](https://img.shields.io/badge/Author-DC--Voltage-blue.svg)](https://github.com/dc-voltage)
-[![Target-Device](https://img.shields.io/badge/Device-Nokia%20AOD311NK%20(5G%20ODU)-orange.svg)](#supported-hardware)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
+<p align="center">
+  <a href="https://github.com/dc-voltage"><img src="https://img.shields.io/badge/Author-DC--Voltage-blue.svg?style=for-the-badge&logo=github" alt="Author"></a>
+  <a href="#supported-hardware"><img src="https://img.shields.io/badge/Device-Nokia%20AOD311NK-orange.svg?style=for-the-badge&logo=nokia" alt="Device"></a>
+  <a href="#1-lock-to-5g-sa-band-n78-jio-true-5g"><img src="https://img.shields.io/badge/5G%20SA-Band%20n78%20(3.5GHz)-success.svg?style=for-the-badge&logo=5g" alt="5G SA n78"></a>
+  <a href="#4-modify-apn-jio-bsnl-vi-airtel"><img src="https://img.shields.io/badge/Carrier-Jio%20%7C%20Airtel%20%7C%20BSNL%20%7C%20Vi-blueviolet.svg?style=for-the-badge" alt="Carriers"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/dc-voltage/airtel-nokia-311nk/stargazers"><img src="https://img.shields.io/github/stars/dc-voltage/airtel-nokia-311nk?style=social" alt="Stars"></a>
+  <a href="https://github.com/dc-voltage/airtel-nokia-311nk/network/members"><img src="https://img.shields.io/github/forks/dc-voltage/airtel-nokia-311nk?style=social" alt="Forks"></a>
+</p>
 
 <p align="center">
   <img src="assets/terminal_status_crop.png" alt="apnctl live status running on Nokia AOD311NK" width="850">
 </p>
 
 A standalone, all-in-one management, APN unlock, and 5G band-locking toolkit for the **Nokia FastMile 5G Outdoor Unit (AOD311NK)** used by Airtel AirFiber in India.
+
+> [!TIP]
+> **Quick Start:** Download the pre-compiled binary [`dist/apnctl`](dist/apnctl) and run:
+> ```bash
+> chmod +x dist/apnctl
+> sudo cp dist/apnctl /usr/local/bin/
+> apnctl status
+> apnctl n78
+> ```
+
 
 ---
 
