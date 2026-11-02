@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller build artifacts
+build/
+*.spec
+
+# Logs and dumps
+*.log
+uart_log.txt
+usb_events.log
+
+# Private backup dumps
+*backup*.json
