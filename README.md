@@ -34,6 +34,7 @@ A standalone, all-in-one management, APN unlock, and 5G band-locking toolkit for
 ## 📋 Table of Contents
 1. [Overview & Motivation](#-overview--motivation)
 2. [Supported Hardware & Firmware](#-supported-hardware--firmware)
+   - [Community test results](#community-test-results)
 3. [Key Features](#-key-features)
 4. [Hardware & Network Setup](#-hardware--network-setup)
    - [Connecting via Laptop (Linux / Windows)](#connecting-via-laptop)
@@ -76,9 +77,49 @@ The **Nokia AOD311NK** is a high-performance Qualcomm-based 5G Outdoor CPE deplo
 | **Product Class** | Fixed Wireless Access (FWA) |
 | **Model Name** | **AOD311NK** (FastMile 5G Receiver) |
 | **Hardware Version** | `3TG03366AAAA` |
-| **Software Version** | `AOD311NK_R4.0` (and compatible variants) |
+| **Software Version** | `AOD311NK_R4.0`. Also tested: R1.0 (works), R3.0 (clients get no internet, see [Community test results](#community-test-results)) |
 | **Default Gateway IP** | `192.168.0.1` |
 | **Management VLAN** | **VLAN 1999** |
+
+---
+
+## Community test results
+
+Measured on real units. "Clients" means a PC behind the ODU on VLAN 1999 that got its address from the
+ODU's DHCP. Each result is one short run, at a weak-signal spot (mostly 4G only, RSRP about -111 to -122 dBm),
+so treat it as "works / does not work", not as speed.
+
+| Firmware | SIM / APN | Mode | Clients behind the ODU |
+|---|---|---|---|
+| R1.0 | Jio / `jionet` | LTE only | **Works**: 25 of 25 pings, avg 125 ms, 3 of 3 pages |
+| R1.0 | Jio / `jionet` | 5G NSA only | Worked (10 of 10, avg 95 ms); right after a mode change 2 of 8, then 18 of 20 at about 1.6 s |
+| R1.0 | Jio / `jionet` | Auto | **No internet** (0 of 10); the ODU's IPv4 field was empty at the last reading |
+| R1.0 | Airtel mobile SIM / `airtelgprs.com` | Auto | **Works**: 12 of 12, avg 65 ms; 5-minute run 295 of 296, avg 63 ms |
+| R3.0 | Jio / `jionet` | Auto | **No internet** (0 of 10, twice), although the ODU's own ping from its web page worked (4 of 4) |
+| R3.0 | Jio / `jionet` | LTE only | **No internet** (0 of 10), with `IPv4 192.0.0.2` shown on the ODU |
+| R3.0 | Airtel mobile SIM / `airtelgprs.com` | Auto | **No internet** in three runs, including after a power cycle |
+
+The R3.0 unit gave clients an address, gateway and DNS, and answered DNS, but forwarded nothing. I have only
+one R3.0 unit, so I cannot tell whether that is the firmware or that unit.
+
+Also tested: a TP-Link ER605 router with a WAN port set to Dynamic IP and **VLAN 1999**. On R1.0 the WAN came up
+with a `192.168.0.x` address and devices behind the router reached the internet through the ODU
+(traceroute: router, then `192.168.0.1`, then the internet).
+
+How it was tested: Windows 11 with a Hyper-V external switch tagged VLAN 1999, an Ubuntu 22.04 PC using an
+802.1Q VLAN 1999 interface (same results), and the router above. Ping and HTTPS to a public address, run
+through a temporary host route so the path is known.
+
+### Notes from testing
+
+- **IPv4 can be empty right after an APN or mode change.** If `IPv4 Address` shows `None`, clients have no
+  internet. On Jio it normally reads `192.0.0.2`; wait a couple of minutes, and re-apply the APN if it stays empty.
+- **Login:** on both R1.0 and R3.0, `/prelogin_status_web_app.cgi` returns 404, so the serial cannot be
+  auto-detected and the tool falls back to the serial hard-coded in the source. That attempt counts as a
+  failed login on the unit (the reply shows `failurecount`). Use the S/N printed on the unit's label as the
+  password with `-p`.
+- **`apnctl n78` selects "5G SA only" (`AccessModeNo` 3).** It does not choose a band, and `status` prints the
+  "5G Standalone" block whenever any 5G band is reported, so it cannot tell SA from NSA.
 
 ---
 
